@@ -74,8 +74,8 @@ shift $(( OPTIND - 1 ));
 
 # Mandatory options
 if [ -z "$DB_NAMES" ]; then
-   usage DB_NAMES
-   exit 1
+    usage DB_NAMES
+    exit 1
 else
     OPTIONS="$OPTIONS --log-error=$ERR_FILE"
     if [ "$VERBOSE" != "" ]; then
