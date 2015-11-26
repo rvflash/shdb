@@ -16,12 +16,13 @@ TABLE_NAMES=""
 VERBOSE=""
 WITH_DATA=0
 WITH_TMP_TABLE=0
+WHERE_CONDITION=""
 BACKUP_FILE=""
 BACKUP_ROOT="$TMP_DIR"
 BACKUP_DATA_FILE="$SQL_DATAS_FILENAME"
 
 function usage () {
-    echo "Usage: ${SCRIPT} -d databases [-t tablenames] [-h hostname] [-u username] [-p password] [-b backupdirectory] [-f sqlfilename] [-l logfilepath] [-v] [-D] [-T]"
+    echo "Usage: ${SCRIPT} -d databases [-t tablenames] [-h hostname] [-u username] [-p password] [-b backupdirectory] [-f sqlfilename] [-l logfilepath] [-w wherecondition] [-v] [-D] [-T]"
     echo "-h for database hostname"
     echo "-u for database username"
     echo "-p for database password"
@@ -32,6 +33,7 @@ function usage () {
     echo "-l to change default log file path"
     echo "-D for export data with schema"
     echo "-T for keep TMP tables, by convention named with _ as fist letter or with _TMP on the name"
+    echo "-w for limit rows selected by the given WHERE condition"
     echo "-v used to print SQL Query"
 
     if [ "$1" != "" ] && [ "$1" = "MYSQLDUMP" ]; then
@@ -52,7 +54,7 @@ fi
 
 # Read the options
 # Use getopts vs getopt for MacOs portability
-while getopts ":h::u::p:d::t::b:l:f:DTv" FLAG; do
+while getopts ":h::u::p:d::t::b:l:f:w:DTv" FLAG; do
     case "${FLAG}" in
         h) if [ "$OPTARG" != "" ]; then DB_HOST="$OPTARG"; fi ;;
         u) if [ "$OPTARG" != "" ]; then DB_USERNAME="$OPTARG"; fi ;;
@@ -63,6 +65,7 @@ while getopts ":h::u::p:d::t::b:l:f:DTv" FLAG; do
         f) if [ "$OPTARG" != "" ]; then BACKUP_DATA_FILE="$OPTARG"; fi ;;
         l) if [ "$OPTARG" != "" ]; then ERR_FILE="$OPTARG"; fi ;;
         v) VERBOSE="-v" ;;
+        w) WHERE_CONDITION="$OPTARG" ;;
         D) WITH_DATA=1 ;;
         T) WITH_TMP_TABLE=1 ;;
         *) usage; exit 1 ;;
@@ -82,6 +85,9 @@ else
     fi
     TABLE_OPTIONS="$OPTIONS --no-data"
     DATAS_OPTIONS="$OPTIONS --no-create-info --compact --complete-insert"
+    if [ "$WHERE_CONDITION" != "" ]; then
+        DATAS_OPTIONS="$DATAS_OPTIONS --where="${WHERE_CONDITION}""
+    fi
 fi
 
 for DB_NAME in ${DB_NAMES}; do
