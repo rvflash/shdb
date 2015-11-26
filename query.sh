@@ -3,14 +3,12 @@
 ##
 # Provide interface to run SQL queries
 
+source inc.common.sh
+
 # Default values
 SCRIPT=`basename ${BASH_SOURCE[0]}`
-CURDATE=`date +%Y%m%d%H%M%S`
-ERR_FILE="/tmp/$CURDATE_shbd_query.err"
+ERR_FILE="/tmp/${CURDATE}_shbd_query.err"
 OPTIONS="--unbuffered --quick --show-warnings --skip-column-names --batch --silent --wait"
-DB_HOST="localhost"
-DB_USERNAME="root"
-DB_PASSWORD="root"
 
 function usage ()
 {
@@ -76,6 +74,11 @@ fi
 SQL=`mysql ${OPTIONS} -h "$DB_HOST" -u "$DB_USERNAME" -p"$DB_PASSWORD" ${DB_NAME} -e "$QUERY" 2>> ${ERR_FILE}`
 if [ $? -ne 0 ]; then
     if [[ "$OPTIONS" == *"verbose"* ]]; then
+        if [ -f ${ERR_FILE} ]; then
+            echo "$QUERY" | cat ${ERR_FILE} > ${ERR_FILE}
+        else
+            echo "$QUERY" > ${ERR_FILE}
+        fi
         cat "$ERR_FILE" | while  read ERR_LINE; do
             echo "$ERR_LINE"
         done
