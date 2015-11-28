@@ -21,7 +21,8 @@ BACKUP_FILE=""
 BACKUP_ROOT="$TMP_DIR"
 BACKUP_DATA_FILE="$SQL_DATAS_FILENAME"
 
-function usage () {
+function usage ()
+{
     echo "Usage: ${SCRIPT} -d databases [-t tablenames] [-h hostname] [-u username] [-p password] [-b backupdirectory] [-f sqlfilename] [-l logfilepath] [-w wherecondition] [-v] [-D] [-T]"
     echo "-h for database hostname"
     echo "-u for database username"
@@ -29,7 +30,7 @@ function usage () {
     echo "-d for database name, separated by a space"
     echo "-t for table name(s), separated by a space"
     echo "-b for backup folder path"
-    echo "-f to name sql data file, named default if not set"
+    echo "-f to name sql data file, named ${SQL_DATAS_FILENAME} if not set"
     echo "-l to change default log file path"
     echo "-D for export data with schema"
     echo "-T for keep TMP tables, by convention named with _ as fist letter or with _TMP on the name"
@@ -96,7 +97,7 @@ for DB_NAME in ${DB_NAMES}; do
     if [ -z "$TABLE_NAMES" ]; then
         QUERY="SHOW TABLES FROM $DB_NAME;"
         TABLE_NAMES=`./query.sh ${VERBOSE} -h "$DB_HOST" -u "$DB_USERNAME" -p "$DB_PASSWORD" -d "$DB_NAME" -q "$QUERY"`
-        exitOnError $? "Unable to retrieve list of tables for $DB_NAME" "$ERR_FILE" "$VERBOSE"
+        exitOnError $? "Unable to retrieve list of tables for $DB_NAME" "$VERBOSE" "$ERR_FILE"
         if [ "$VERBOSE" != "" ]; then
             echo "$TABLE_NAMES" | sed -n '/--------------/,/--------------/p' | sed 's/-*//' | sed '/^$/d'
             TABLE_NAMES=$(echo "$TABLE_NAMES" | sed '/--------------/,+1 d')
@@ -120,12 +121,12 @@ for DB_NAME in ${DB_NAMES}; do
         fi
         BACKUP_FILE="$BACKUP_ROOT/$DB_NAME/$TABLE_NAME"
         mkdir -p "$BACKUP_FILE"
-        exitOnError $? "Unable to create path $BACKUP_FILE" "$ERR_FILE" "$VERBOSE"
+        exitOnError $? "Unable to create path $BACKUP_FILE" "$VERBOSE" "$ERR_FILE"
 
         # Dump table structure
         TABLE_BACKUP_FILE="$BACKUP_FILE/$SQL_TABLE_FILENAME"
         mysqldump ${TABLE_OPTIONS} -h "$DB_HOST" -u "$DB_USERNAME" -p"$DB_PASSWORD" "$DB_NAME" "$TABLE_NAME" > ${TABLE_BACKUP_FILE} 2>> ${ERR_FILE}
-        exitOnError $? "Unable to dump table structure for $DB_NAME.$TABLE_NAME" "$ERR_FILE" "$VERBOSE"
+        exitOnError $? "Unable to dump table structure for $DB_NAME.$TABLE_NAME" "$VERBOSE" "$ERR_FILE"
         if [ "$VERBOSE" != "" ]; then
             echo "SQL dump file for table structure for $DB_NAME.$TABLE_NAME: $TABLE_BACKUP_FILE"
         fi
@@ -134,7 +135,7 @@ for DB_NAME in ${DB_NAMES}; do
         if [ "$WITH_DATA" = 1 ]; then
             DATA_BACKUP_FILE="$BACKUP_FILE/$BACKUP_DATA_FILE"
             mysqldump ${DATAS_OPTIONS} -h "$DB_HOST" -u "$DB_USERNAME" -p"$DB_PASSWORD" "$DB_NAME" "$TABLE_NAME" > ${DATA_BACKUP_FILE} 2>> ${ERR_FILE}
-            exitOnError $? "Unable to dump datas of table $DB_NAME.$TABLE_NAME" "$ERR_FILE" "$VERBOSE"
+            exitOnError $? "Unable to dump datas of table $DB_NAME.$TABLE_NAME" "$VERBOSE" "$ERR_FILE"
             if [ "$VERBOSE" != "" ]; then
                 echo "SQL dump file for datas of table $DB_NAME.$TABLE_NAME: $DATA_BACKUP_FILE"
             fi

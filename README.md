@@ -37,6 +37,8 @@ Usage: ./dump.sh -d databases -t tablenames [-h hostname] [-u username] [-p pass
 * -w for limit rows selected by the given WHERE condition
 * -v used to print SQL Query
 
+```bash
+````
 
 ### Load: import one, more or all tables in one or more databases
 

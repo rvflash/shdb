@@ -22,7 +22,8 @@ WITH_SCHEMA=0
 WITH_DATA=0
 FORCE_REBUILD=0
 
-function usage () {
+function usage ()
+{
     echo "Usage: ${SCRIPT} -b sourcedirectory [-d databases] [-t tablenames] [-h hostname] [-u username] [-p password] [-l logfilepath] [-v] [-r] [-B] [-D]"
     echo "-b for root repository with SQL files"
     echo "-d for database name, separated by a space"
@@ -111,7 +112,7 @@ for DB_NAME in ${DB_NAMES}; do
 
         # Force table creation before inserting datas
         SQL_FILES=`find "${SQL_SEARCH_PATH}" -name "${SQL_SEARCH_FILE}" -type f 2>> ${ERR_FILE}`
-        exitOnError $? "Unable to find: $SQL_SEARCH_PATH" "$ERR_FILE" "$VERBOSE"
+        exitOnError $? "Unable to find: $SQL_SEARCH_PATH" "$VERBOSE" "$ERR_FILE"
 
         for SQL_FILE in ${SQL_FILES}; do
             if [ "$SQL_FILE" != *"/$SQL_TABLE_FILENAME" ]; then
@@ -138,7 +139,7 @@ for DB_NAME in ${DB_NAMES}; do
             cat ${BACKUP_FILE}
         else
             mysql ${OPTIONS} -h "$DB_HOST" -u "$DB_USERNAME" -p"$DB_PASSWORD" ${DB_NAME} < ${BACKUP_FILE} 2>> ${ERR_FILE}
-            exitOnError $? "Unable to load in mysql database file named: $BACKUP_FILE" "$ERR_FILE" "$VERBOSE"
+            exitOnError $? "Unable to load in mysql database the file named: $BACKUP_FILE" "$VERBOSE" "$ERR_FILE"
             if [ "$VERBOSE" != "" ]; then
                 echo "SQL file $BACKUP_FILE loaded with success in $DB_NAME"
             fi

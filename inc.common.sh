@@ -36,14 +36,14 @@ function getDirectoryPath ()
 # Exit in error case, if $1 is not equals to 0
 # @param string $1 return code of previous step
 # @param string $2 message to log
-# @param string $3 filepath for logs
-# @param string $4 verbose mode
+# @param string $3 verbose mode
+# @param string $4 filepath for logs
 function exitOnError ()
 {
     local ERR_CODE="$1"
     local ERR_MSG="$2"
-    local ERR_FILE="$3"
-    local ERR_LOG="$4"
+    local ERR_LOG="$3"
+    local ERR_FILE="$4"
 
     if [ "$ERR_CODE" != "0" ]; then
         if [ "$ERR_MSG" != "" ] && [ "$ERR_FILE" != "" ]; then
