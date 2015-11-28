@@ -37,7 +37,6 @@ Usage: ./dump.sh -d databases -t tablenames [-h hostname] [-u username] [-p pass
 * -w for limit rows selected by the given WHERE condition
 * -v used to print SQL Query
 
-
 ### Load: import one, more or all tables in one or more databases
 
 * Usage: ./load.sh -b sourcedirectory [-d databases] [-t tablenames] [-h hostname] [-u username] [-p password] [-l logfilepath] [-v] [-r] [-D]
@@ -53,6 +52,20 @@ Usage: ./dump.sh -d databases -t tablenames [-h hostname] [-u username] [-p pass
 * -D for export data with schema
 * -B to force re-build (drop table, etc.)
 
+#### Prevent the re-building (remove drop table, create only if not exists and ignore duplicated content)
+
+```bash
+./load.sh -b "/tmp/rv" -d my_base -v -r -D
+-- --------------------------------------------------------------- my_base
+
+CREATE TABLE IF NOT EXISTS `RV` (
+  `RV_ID` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `TITLE` char(12) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`RV_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT IGNORE INTO `RV` (`RV_ID`, `TITLE`) VALUES (1,'Hello'),(2,'World');
+````
 
 ### Query: basic interface to run SQL query
 
