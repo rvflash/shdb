@@ -55,7 +55,7 @@ Usage: ./dump.sh -d databases -t tablenames [-h hostname] [-u username] [-p pass
 #### Prevent the re-building (remove drop table, create only if not exists and ignore duplicate content)
 
 ```bash
-./load.sh -d my_base -v -D -r
+./load.sh -b "/tmp/rv" -d my_base -v -r -D
 -- --------------------------------------------------------------- my_base
 
 CREATE TABLE IF NOT EXISTS `RV` (
