@@ -52,7 +52,7 @@ Usage: ./dump.sh -d databases -t tablenames [-h hostname] [-u username] [-p pass
 * -D for export data with schema
 * -B to force re-build (drop table, etc.)
 
-#### Prevent the re-building (remove drop table, create only if not exists and ignore duplicate content)
+#### Prevent the re-building (remove drop table, create only if not exists and ignore duplicated content)
 
 ```bash
 ./load.sh -b "/tmp/rv" -d my_base -v -r -D
