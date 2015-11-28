@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ##
 # Provide interface to load SQL data and/or structure to (re)build a database
