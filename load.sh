@@ -129,6 +129,7 @@ for DB_NAME in ${DB_NAMES}; do
 
         # Re-build database / tables ?
         if [ ${FORCE_REBUILD} = 0 ]; then
+            sed -i 's/INSERT INTO/INSERT IGNORE INTO/g' ${BACKUP_FILE}
             sed -i 's/CREATE TABLE/CREATE TABLE IF NOT EXISTS/g' ${BACKUP_FILE}
             sed -i -e 's/DROP TABLE.*$//' ${BACKUP_FILE}
         fi
