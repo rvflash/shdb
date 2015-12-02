@@ -1,6 +1,8 @@
 # shdb
 
 Bash command line tools to dump and load MySQl table's structure with or without datas.
+Create a folder by database and one folder by table inside.
+Enable re-building or not to prevent overloading. Remove "DROP TABLE" in SQL file, add "IF EXISTS" on table and replace "INSERT" by "INSERT IGNORE 
 
 ## About
 Developed to provide methods to save the structure and default informations of MySql tables in a GIT repository.
