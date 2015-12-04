@@ -6,7 +6,7 @@
 source inc.common.sh
 
 # Environment
-SCRIPT=`basename ${BASH_SOURCE[0]}`
+SCRIPT=$(basename ${BASH_SOURCE[0]})
 ERR_FILE="${TMP_DIR}${RANDOM}_query.err"
 
 # Default values
@@ -73,13 +73,13 @@ else
     fi
 fi
 
-SQL=$(mysql ${OPTIONS} -h "$DB_HOST" -u "$DB_USERNAME" -p"$DB_PASSWORD" ${DB_NAME} -e "$QUERY" 2>> ${ERR_FILE})
+SQL=$(mysql ${OPTIONS} -h "$DB_HOST" -u "$DB_USERNAME" -p"$DB_PASSWORD" ${DB_NAME} -e "$QUERY" 2>> "$ERR_FILE")
 if [ $? -ne 0 ]; then
     if [[ "$OPTIONS" == *"verbose"* ]]; then
         if [ -f ${ERR_FILE} ]; then
-            echo "$QUERY" | cat ${ERR_FILE} > ${ERR_FILE}
+            echo "$QUERY" | cat "$ERR_FILE" > "$ERR_FILE"
         else
-            echo "$QUERY" > ${ERR_FILE}
+            echo "$QUERY" > "$ERR_FILE"
         fi
         cat "$ERR_FILE" | while  read ERR_LINE; do
             echo "$ERR_LINE"

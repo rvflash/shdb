@@ -6,10 +6,11 @@ DB_USERNAME="root"
 DB_PASSWORD="root"
 
 # Constants
-declare -r CURDATE=`date +%Y%m%d`
-declare -r TMP_DIR='/tmp/shdb/${CURDATE}/'
-declare -r SQL_TABLE_FILENAME='table.sql'
-declare -r SQL_DATAS_FILENAME='datas.sql'
+declare -r CURDATE=$(date +%Y%m%d)
+declare -r TMP_DIR="/tmp/shdb/${CURDATE}/"
+declare -r SQL_TABLE_FILENAME="table.sql"
+declare -r SQL_DATAS_FILENAME="datas.sql"
+declare -r SQL_TABLE_SEPARATOR="--------------"
 
 # Create temporary workspace
 mkdir -p "$TMP_DIR"
@@ -50,7 +51,7 @@ function exitOnError ()
 
     if [ "$ERR_CODE" -ne 0 ]; then
         if [ "$ERR_MSG" != "" ] && [ -f "$ERR_FILE" ]; then
-            echo "$ERR_MSG" >> ${ERR_FILE}
+            echo "$ERR_MSG" >> "$ERR_FILE"
         fi
         if [ "$ERR_LOG" != "" ]; then
             if [ -z "$ERR_FILE" ]; then

@@ -7,7 +7,7 @@
 source inc.common.sh
 
 # Environment
-SCRIPT=`basename ${BASH_SOURCE[0]}`
+SCRIPT=$(basename ${BASH_SOURCE[0]})
 SQL=""
 
 function usage ()
@@ -56,13 +56,13 @@ fi
 for TABLE_NAME in ${TABLE_NAMES}; do
 
     QUERY="SHOW CREATE TABLE $TABLE_NAME;"
-    SCHEMA=$( ./query.sh -h "$DB_HOST" -u "$DB_USERNAME" -p "$DB_PASSWORD" -d "$DB_NAME" -q "$QUERY" "$VERBOSE")
+    SCHEMA=$(./query.sh -h "$DB_HOST" -u "$DB_USERNAME" -p "$DB_PASSWORD" -d "$DB_NAME" -q "$QUERY" "$VERBOSE")
     if [ $? -ne 0 ]; then
         exit $?
     fi
 
     # Remove redundant table name
-    SCHEMA=`echo "${SCHEMA}" | sed -e 's/.*CREATE TABLE/CREATE TABLE/'`
+    SCHEMA=$(echo "${SCHEMA}" | sed -e "s/.*CREATE TABLE/CREATE TABLE/")
     if [ -z "$SCHEMA" ]; then
         continue
     fi

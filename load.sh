@@ -12,7 +12,7 @@ source inc.common.sh
 # Environment
 getDirectoryPath "${BASH_SOURCE[0]}"
 SCRIPT_ROOT="$DIRECTORY_PATH"
-SCRIPT=`basename ${BASH_SOURCE[0]}`
+SCRIPT=$(basename ${BASH_SOURCE[0]})
 ERR_FILE="${TMP_DIR}${RANDOM}_load.err"
 
 # Default values

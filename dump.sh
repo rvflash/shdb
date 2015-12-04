@@ -10,7 +10,7 @@ source inc.common.sh
 # Environment
 getDirectoryPath "${BASH_SOURCE[0]}"
 SCRIPT_ROOT="$DIRECTORY_PATH"
-SCRIPT=`basename ${BASH_SOURCE[0]}`
+SCRIPT=$(basename ${BASH_SOURCE[0]})
 ERR_FILE="${TMP_DIR}${RANDOM}_dump.err"
 
 # Default values
@@ -101,8 +101,8 @@ for DB_NAME in ${DB_NAMES}; do
         TABLE_NAMES=$(./query.sh ${VERBOSE} -h "$DB_HOST" -u "$DB_USERNAME" -p "$DB_PASSWORD" -d "$DB_NAME" -q "$QUERY")
         exitOnError $? "Unable to retrieve list of tables for $DB_NAME" "$VERBOSE" "$ERR_FILE"
         if [ "$VERBOSE" != "" ]; then
-            echo "$TABLE_NAMES" | sed -n '/--------------/,/--------------/p' | sed 's/-*//' | sed '/^$/d'
-            TABLE_NAMES=$(echo "$TABLE_NAMES" | sed '/--------------/,+1 d')
+            echo "$TABLE_NAMES" | sed -n "/${SQL_TABLE_SEPARATOR}/,/${SQL_TABLE_SEPARATOR}/p" | sed "s/-*//" | sed "/^$/d"
+            TABLE_NAMES=$(echo "$TABLE_NAMES" | sed "/${SQL_TABLE_SEPARATOR}/,+1 d")
         fi
     fi
 
