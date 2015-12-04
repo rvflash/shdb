@@ -6,10 +6,14 @@ DB_USERNAME="root"
 DB_PASSWORD="root"
 
 # Constants
-declare -r TMP_DIR='/tmp/'
-declare -r CURDATE=`date +%Y%m%d%H%M%S`
-declare -r SQL_TABLE_FILENAME='table.sql'
-declare -r SQL_DATAS_FILENAME='datas.sql'
+declare -r CURDATE=$(date +%Y%m%d)
+declare -r TMP_DIR="/tmp/shdb/${CURDATE}/"
+declare -r SQL_TABLE_FILENAME="table.sql"
+declare -r SQL_DATAS_FILENAME="datas.sql"
+declare -r SQL_TABLE_SEPARATOR="--------------"
+
+# Create temporary workspace
+mkdir -p "$TMP_DIR"
 
 ##
 # Resolve $1 or current path until the file is no longer a symlink
@@ -19,10 +23,10 @@ function getDirectoryPath ()
 {
     local SOURCE="$1"
     while [ -h "$SOURCE" ]; do
-      local DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-      SOURCE="$(readlink "$SOURCE")"
-      # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
-      [[ ${SOURCE} != /* ]] && SOURCE="$DIR/$SOURCE"
+        local DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+        SOURCE="$(readlink "$SOURCE")"
+        # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+        [[ ${SOURCE} != /* ]] && SOURCE="$DIR/$SOURCE"
     done
     DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
@@ -45,15 +49,15 @@ function exitOnError ()
     local ERR_LOG="$3"
     local ERR_FILE="$4"
 
-    if [ "$ERR_CODE" != "0" ]; then
-        if [ "$ERR_MSG" != "" ] && [ "$ERR_FILE" != "" ]; then
-            echo "$ERR_MSG" >> ${ERR_FILE}
+    if [ "$ERR_CODE" -ne 0 ]; then
+        if [ "$ERR_MSG" != "" ] && [ -f "$ERR_FILE" ]; then
+            echo "$ERR_MSG" >> "$ERR_FILE"
         fi
         if [ "$ERR_LOG" != "" ]; then
             if [ -z "$ERR_FILE" ]; then
                 echo "$ERR_MSG"
-            else
-                cat ${ERR_FILE} | while  read ERR_LINE; do
+            elif  [ -f "$ERR_FILE" ]; then
+                cat "$ERR_FILE" | while  read ERR_LINE; do
                     echo "$ERR_LINE"
                 done
             fi
