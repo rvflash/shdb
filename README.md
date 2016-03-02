@@ -25,19 +25,18 @@ mysql & mysqldump command line tools
 
 It is possible to make several databases simultaneously but surely of little use in a production environment.
 
-Usage: ./dump.sh -d databases -t tablenames [-h hostname] [-u username] [-p password] [-b backupdirectory] [-f sqlfilename] [-l logfilepath] [-w wherecondition] [-v] [-D] [-T]
-* -h for database hostname
-* -u for database username
-* -p for database password
-* -d for database name, separated by a space
+usage: ./dump.sh -d databases [-t tables] [-h host] [-u user] [-p password] [-b backupDirectory] [-f sqlFileName] [-w whereCondition] [-v] [-D] [-T]
+* -d for database name(s), separated by a space
 * -t for table name(s), separated by a space
+* -h for database hostname, default 'localhost'
+* -u for database username, default 'mysql'
+* -p for database password, default ''
 * -b for backup folder path
-* -f to name sql data file, named default if not set
-* -l to change default log file path
-* -D for export data with schema
-* -T for keep TMP tables, by convention named with _ as fist letter or with _TMP on the name
+* -f to name sql data file, default 'datas.sql'
 * -w for limit rows selected by the given WHERE condition
 * -v used to print SQL Query
+* -D for export data with schema
+* -T for keep TMP tables, by convention named with '_' as first letter or with '_TMP' on the name
 
 ### Load: import one, more or all tables in one or more databases
 
@@ -68,14 +67,3 @@ CREATE TABLE IF NOT EXISTS `RV` (
 
 INSERT IGNORE INTO `RV` (`RV_ID`, `TITLE`) VALUES (1,'Hello'),(2,'World');
 ````
-
-### Query: basic interface to run SQL query
-
-* Usage: ./query.sh -d database -q query [-h hostname] [-u username] [-p password] [-l logfilepath] [-v]
-* -h for database hostname
-* -u for database username
-* -p for database password
-* -d for database name
-* -q for SQL query
-* -l to change default log file path
-* -v used to print SQL Query
