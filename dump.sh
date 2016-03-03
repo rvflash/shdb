@@ -38,40 +38,6 @@ declare -i withTmpTable=0
 
 
 ##
-# Display progress bar or more information
-# @param string $1 Database name
-# @param int $2 Status code
-# @param string $3 Error message
-# @param int $4 Step
-# @param int $5 Max
-# @return string
-function inform ()
-{
-    local name="$1"
-    declare -i status="$2"
-    local error="$3"
-    declare -i step="$4"
-    declare -i max="$5"
-    if [[ ${max} -eq 0 ]]; then
-        max=100
-    fi
-
-    if logIsMuted; then
-        if [[ ${status} -eq 0 ]]; then
-            error=""
-        else
-            max=-1
-        fi
-        progressBar "$name" "$step" "$max" "$error"
-    elif [[ ${status} -eq 0 ]]; then
-        pInfo "$error"
-    else
-        pFatal "$error"
-        exit 1
-    fi
-}
-
-##
 # Help
 # @return string
 function usage ()
