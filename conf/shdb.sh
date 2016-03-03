@@ -18,8 +18,8 @@ declare -r SHDB_DB_PASSWORD=""
 
  # Single transaction as option is mandatory for Brighthouse database
 declare -r SHDB_DUMP_OPTIONS="--opt --no-create-db --skip-trigger"
-declare -r SHDB_DUMP_DATA_OPTIONS="${SHDB_DUMP_OPTIONS} --no-data --single-transaction"
-declare -r SHDB_DUMP_TABLE_OPTIONS="${SHDB_DUMP_OPTIONS} --no-create-info --compact --complete-insert"
+declare -r SHDB_DUMP_TABLE_OPTIONS="${SHDB_DUMP_OPTIONS} --no-data --single-transaction"
+declare -r SHDB_DUMP_DATA_TABLE_OPTIONS="${SHDB_DUMP_OPTIONS} --no-create-info --compact --complete-insert"
 
 # Create temporary workspace
 mkdir -p "${SHDB_TMP_DIR}"

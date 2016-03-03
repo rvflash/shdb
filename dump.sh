@@ -36,6 +36,41 @@ whereCondition=""
 declare -i withData=0
 declare -i withTmpTable=0
 
+
+##
+# Display progress bar or more information
+# @param string $1 Database name
+# @param int $2 Status code
+# @param string $3 Error message
+# @param int $4 Step
+# @param int $5 Max
+# @return string
+function inform ()
+{
+    local name="$1"
+    declare -i status="$2"
+    local error="$3"
+    declare -i step="$4"
+    declare -i max="$5"
+    if [[ ${max} -eq 0 ]]; then
+        max=100
+    fi
+
+    if logIsMuted; then
+        if [[ ${status} -eq 0 ]]; then
+            error=""
+        else
+            max=-1
+        fi
+        progressBar "$name" "$step" "$max" "$error"
+    elif [[ ${status} -eq 0 ]]; then
+        pInfo "$error"
+    else
+        pFatal "$error"
+        exit 1
+    fi
+}
+
 ##
 # Help
 # @return string
@@ -107,40 +142,51 @@ fi
 
 for dbName in ${dbNames}; do
 
+    # Database to process
+    dumpBd="Dump ${dbName}"
+    if logIsMuted; then
+        progressBar "$dumpBd"
+    fi
+
     # Connection check
     dbLink=$(mysqlConnect "$dbHost" "$dbUser" "$dbPassword" "$dbName")
     if [[ $? -ne 0 ]]; then
-        pFatal "ConnectionError.DATABASE"
+        error="ConnectionError.DATABASE"
+        if logIsMuted; then
+            progressBar "$dumpBd" 0 -1 "$error"
+        fi
+        pFatal "$error"
     fi
 
     # If no table in entry, we retrieve all available tables for the database
     if [[ -z "$tableNames" ]]; then
         result=$(mysqlFetchRaw "$dbLink" "SHOW TABLES FROM ${dbName};")
         if [[ $? -ne 0 ]]; then
-            pFatal "QueryError.SHOW_TABLES"
+            error="QueryError.SHOW_TABLES"
+            if logIsMuted; then
+                progressBar "$dumpBd" 0 -1 "$error"
+            fi
+            pFatal "$error"
         fi
         declare -a dbTableNames="(${result})"
     else
         declare -a dbTableNames="(${tableNames})"
     fi
 
-    # Start process bar
-    if logIsMuted; then
-        progressBar "$dbName" "0" "${#dbTableNames[@]}"
-    fi
-
+    declare -i s="${#dbTableNames[@]}"
     declare -i k
     for k in "${!dbTableNames[@]}"; do
+
         # Table to process
         tableName="${dbTableNames[$k]}"
 
-        # Skip TMP tables
+        # Skip temporary tables
         if [[ ${withTmpTable} -eq 0 ]] && [[ "$tableName" == "_"* || "$tableName" == *"_TMP"* ]]; then
-            pInfoF "DumpSkipTable.%s" "$tableName"
+            pWarnF "DumpTable.SKIP_TABLE (%s)" "$tableName"
             continue
         fi
 
-        # One folder by table name (remove redundant slash) and create workspace
+        # One folder by table (remove redundant slash)
         if [[ "${dumpDir: -1}" == "/" ]]; then
             dumpDir="${dumpDir:0:-1}"
         fi
@@ -151,29 +197,37 @@ for dbName in ${dbNames}; do
         dumpTableFile="${dumpDbDir}/${SHDB_SQL_TABLE_FILENAME}"
         mysqlDump "$dbLink" "$tableName" "${SHDB_DUMP_TABLE_OPTIONS}" > "$dumpTableFile"
         if [[ $? -ne 0 ]]; then
-            pFatalF "DumpError.%s\n%s" "$tableName" "$(mysqlLastError "$dbLink")"
+            error="DumpError.UNKNOWN_TABLE (${tableName})"
+            if logIsMuted; then
+                progressBar "$dumpBd" "$k" -1 "$error"
+            fi
+            pFatalF "${error}\n%s" "$(mysqlLastError "$dbLink")"
         else
-            pInfoF "DumpTable.%s (%s)" "$tableName" "$dumpTableFile"
+            pInfoF "DumpTable.CREATE_TABLE (%s: %s)" "$tableName" "$dumpTableFile"
         fi
 
         # Dump with datas table
         if [[ ${withData} -eq 1 ]]; then
             dumpDataFile="${dumpDbDir}/${dumpDataFileName}"
-            dataOptions="${SHDB_DUMP_DATA_OPTIONS}"
+            dataOptions="${SHDB_DUMP_DATA_TABLE_OPTIONS}"
             if [[ -n "${whereCondition}" ]]; then
                 dataOptions+=" --where="${whereCondition}""
             fi
             mysqlDump "$dbLink" "$tableName" "$dataOptions" > "$dumpDataFile"
             if [[ $? -ne 0 ]]; then
-                pFatalF "DumpError.%s\n%s" "$tableName" "$(mysqlLastError "$dbLink")"
+                error="DumpError.READ_ONLY_TABLE (${tableName})"
+                if logIsMuted; then
+                    progressBar "$dumpBd" "$k" -1 "$error"
+                fi
+                pFatalF "${error}\n%s" "$(mysqlLastError "$dbLink")"
             else
-                pInfoF "DumpDataTable.%s (%s)" "$tableName" "$dumpDataFile"
+                pInfoF "DumpTable.INSERT_TABLE (%s: %s)" "$tableName" "$dumpDataFile"
             fi
         fi
 
         # Update progress bar
         if logIsMuted; then
-            progressBar "$dbName" "$(($k+1))" "${#dbTableNames[@]}"
+            progressBar "$dumpBd" "$(($k+1))" "$s"
         fi
     done;
 done;
