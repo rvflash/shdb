@@ -73,12 +73,12 @@ function dialog ()
 #    Upload  [++++++++++++++++----] 70%
 #
 # @param string $1 Name
-# @param int $2 Step
-# @param int $3 Max
-# @param string $4 Error, default "An error occured". Printed if the max value is lower or equals to 0
-# @param int $5 With, default 20
-# @param string $6 CharEmpty, default -
-# @param string $7 CharFilled, default +
+# @param int $2 Step, default '0'
+# @param int $3 Max, default '100'
+# @param string $4 Error, default 'An error occured'. Printed if the max value is lower or equals to 0
+# @param int $5 With, default '20'
+# @param string $6 CharEmpty, default '-'
+# @param string $7 CharFilled, default '+'
 # @return string
 # @returnStatus 1 If first parameter named jobName is empty
 # @returnStatus 1 If third parameter named Max is negative (an error occured)
@@ -88,14 +88,24 @@ function progressBar ()
     if [[ -z "$name" ]]; then
         return 1
     fi
-    declare -i step="$2"
-    declare -i max="$3"
+    declare -i step
+    if [[ "$2" =~ ^[-+]?[0-9]+$ ]]; then
+        step="$2"
+    else
+        step=0
+    fi
+    declare -i max
+    if [[ "$3" =~ ^[-+]?[0-9]+$ ]]; then
+        max="$3"
+    else
+        max=100
+    fi
     local error="$4"
     if [[ -z "$error" ]]; then
         error="${BP_TERM_ERROR}"
     fi
     if [[ ${max} -le 0 ]]; then
-        echo -e "$error"
+        echo -e " ${BP_ASCII_COLOR_RED}${error}${BP_ASCII_COLOR_OFF}"
         return 1
     fi
     declare -i width="$5"
@@ -125,7 +135,7 @@ function progressBar ()
     # Output to screen
     local strFilled=$(printf "%${progress}s" | tr " " "$charFilled")
     local strEmpty=$(printf "%${empty}s" | tr " " "$charEmpty")
-    printf "\r%s [%s%s] %d%% " "$name" "$strFilled" "$strEmpty" "$percent"
+    printf "\r%s [%s%s] %d%%" "$name" "$strFilled" "$strEmpty" "$percent"
 
     # Job done
     if [[ ${step} -ge ${max} ]]; then

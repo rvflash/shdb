@@ -6,9 +6,9 @@ source ../log/print.sh
 declare -r TEST_LOG_PREFIX="bp"
 declare -r TEST_LOG_NUM="12"
 declare -r TEST_LOG_MSG="Bash package with informational message"
-declare -r TEST_LOG_WARN_MSG=$(echo -e "${BP_LOG_COLOR_YELLOW}${TEST_LOG_MSG}${BP_LOG_COLOR_OFF}")
-declare -r TEST_LOG_ERROR_MSG=$(echo -e "${BP_LOG_COLOR_IRED}${TEST_LOG_MSG}${BP_LOG_COLOR_OFF}")
-declare -r TEST_LOG_FATAL_MSG=$(echo -e "${BP_LOG_COLOR_RED}${TEST_LOG_MSG}${BP_LOG_COLOR_OFF}")
+declare -r TEST_LOG_WARN_MSG=$(echo -e "${BP_ASCII_COLOR_YELLOW}${TEST_LOG_MSG}${BP_ASCII_COLOR_OFF}")
+declare -r TEST_LOG_ERROR_MSG=$(echo -e "${BP_ASCII_COLOR_IRED}${TEST_LOG_MSG}${BP_ASCII_COLOR_OFF}")
+declare -r TEST_LOG_FATAL_MSG=$(echo -e "${BP_ASCII_COLOR_RED}${TEST_LOG_MSG}${BP_ASCII_COLOR_OFF}")
 
 
 readonly TEST_LOG_P_INFO="-01-01-01-01-01-01-01-01-01"
@@ -247,17 +247,17 @@ function test_pWarnF ()
     # Check with pattern, integer and message
     test=$(pWarnF "%d-%s" "${TEST_LOG_NUM}" "${TEST_LOG_MSG}")
     echo -n "-$?"
-    [[ "$(echo -e "${BP_LOG_COLOR_YELLOW}${TEST_LOG_NUM}-${TEST_LOG_MSG}${BP_LOG_COLOR_OFF}")" == "$test" ]] && echo -n 1
+    [[ "$(echo -e "${BP_ASCII_COLOR_YELLOW}${TEST_LOG_NUM}-${TEST_LOG_MSG}${BP_ASCII_COLOR_OFF}")" == "$test" ]] && echo -n 1
 
     # Check with pattern, integer and message
     test=$(pWarnF "%s: %d-%s" "${TEST_LOG_MSG}" "${TEST_LOG_NUM}" "${TEST_LOG_MSG}")
     echo -n "-$?"
-    [[ "$(echo -e "${BP_LOG_COLOR_YELLOW}${TEST_LOG_MSG}: ${TEST_LOG_NUM}-${TEST_LOG_MSG}${BP_LOG_COLOR_OFF}")" == "$test" ]] && echo -n 1
+    [[ "$(echo -e "${BP_ASCII_COLOR_YELLOW}${TEST_LOG_MSG}: ${TEST_LOG_NUM}-${TEST_LOG_MSG}${BP_ASCII_COLOR_OFF}")" == "$test" ]] && echo -n 1
 
     # Check with invalid formatstring
     test=$(pWarnF "%s-%d" "${TEST_LOG_NUM}" "${TEST_LOG_MSG}")
     echo -n "-$?"
-    [[ "$(echo -e "${BP_LOG_COLOR_YELLOW}${TEST_LOG_NUM}-0${BP_LOG_COLOR_OFF}")" == "$test" ]] && echo -n 1
+    [[ "$(echo -e "${BP_ASCII_COLOR_YELLOW}${TEST_LOG_NUM}-0${BP_ASCII_COLOR_OFF}")" == "$test" ]] && echo -n 1
 }
 
 
@@ -372,17 +372,17 @@ function test_pErrorF ()
     # Check with pattern, integer and message
     test=$(pErrorF "%d-%s" "${TEST_LOG_NUM}" "${TEST_LOG_MSG}")
     echo -n "-$?"
-    [[ "$(echo -e "${BP_LOG_COLOR_IRED}${TEST_LOG_NUM}-${TEST_LOG_MSG}${BP_LOG_COLOR_OFF}")" == "$test" ]] && echo -n 1
+    [[ "$(echo -e "${BP_ASCII_COLOR_IRED}${TEST_LOG_NUM}-${TEST_LOG_MSG}${BP_ASCII_COLOR_OFF}")" == "$test" ]] && echo -n 1
 
     # Check with pattern, integer and message
     test=$(pErrorF "%s: %d-%s" "${TEST_LOG_MSG}" "${TEST_LOG_NUM}" "${TEST_LOG_MSG}")
     echo -n "-$?"
-    [[ "$(echo -e "${BP_LOG_COLOR_IRED}${TEST_LOG_MSG}: ${TEST_LOG_NUM}-${TEST_LOG_MSG}${BP_LOG_COLOR_OFF}")" == "$test" ]] && echo -n 1
+    [[ "$(echo -e "${BP_ASCII_COLOR_IRED}${TEST_LOG_MSG}: ${TEST_LOG_NUM}-${TEST_LOG_MSG}${BP_ASCII_COLOR_OFF}")" == "$test" ]] && echo -n 1
 
     # Check with invalid formatstring
     test=$(pErrorF "%s-%d" "${TEST_LOG_NUM}" "${TEST_LOG_MSG}")
     echo -n "-$?"
-    [[ "$(echo -e "${BP_LOG_COLOR_IRED}${TEST_LOG_NUM}-0${BP_LOG_COLOR_OFF}")" == "$test" ]] && echo -n 1
+    [[ "$(echo -e "${BP_ASCII_COLOR_IRED}${TEST_LOG_NUM}-0${BP_ASCII_COLOR_OFF}")" == "$test" ]] && echo -n 1
 }
 
 
@@ -497,17 +497,17 @@ function test_pFatalF ()
     # Check with pattern, integer and message
     test=$(pFatalF "%d-%s" "${TEST_LOG_NUM}" "${TEST_LOG_MSG}")
     echo -n "-$?"
-    [[ "$(echo -e "${BP_LOG_COLOR_RED}${TEST_LOG_NUM}-${TEST_LOG_MSG}${BP_LOG_COLOR_OFF}")" == "$test" ]] && echo -n 1
+    [[ "$(echo -e "${BP_ASCII_COLOR_RED}${TEST_LOG_NUM}-${TEST_LOG_MSG}${BP_ASCII_COLOR_OFF}")" == "$test" ]] && echo -n 1
 
     # Check with pattern, integer and message
     test=$(pFatalF "%s: %d-%s" "${TEST_LOG_MSG}" "${TEST_LOG_NUM}" "${TEST_LOG_MSG}")
     echo -n "-$?"
-    [[ "$(echo -e "${BP_LOG_COLOR_RED}${TEST_LOG_MSG}: ${TEST_LOG_NUM}-${TEST_LOG_MSG}${BP_LOG_COLOR_OFF}")" == "$test" ]] && echo -n 1
+    [[ "$(echo -e "${BP_ASCII_COLOR_RED}${TEST_LOG_MSG}: ${TEST_LOG_NUM}-${TEST_LOG_MSG}${BP_ASCII_COLOR_OFF}")" == "$test" ]] && echo -n 1
 
     # Check with invalid formatstring
     test=$(pFatalF "%s-%d" "${TEST_LOG_NUM}" "${TEST_LOG_MSG}")
     echo -n "-$?"
-    [[ "$(echo -e "${BP_LOG_COLOR_RED}${TEST_LOG_NUM}-0${BP_LOG_COLOR_OFF}")" == "$test" ]] && echo -n 1
+    [[ "$(echo -e "${BP_ASCII_COLOR_RED}${TEST_LOG_NUM}-0${BP_ASCII_COLOR_OFF}")" == "$test" ]] && echo -n 1
 }
 
 

@@ -17,12 +17,6 @@ declare -r BP_LOG_LEVEL_ERROR="error"
 declare -r BP_LOG_LEVEL_FATAL="fatal"
 declare -r BP_LOG_UTC_DATE_FORMAT="%Y-%m-%dT%H:%M:%S%z"
 
-# ASCII Color
-declare -r BP_LOG_COLOR_OFF='\033[0m'
-declare -r BP_LOG_COLOR_RED='\033[0;31m'
-declare -r BP_LOG_COLOR_IRED='\033[0;91m'
-declare -r BP_LOG_COLOR_YELLOW='\033[0;33m'
-
 # Properties
 declare BP_LOG_PREFIX
 declare -i BP_LOG_WITH_DATE_TIME=0

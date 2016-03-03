@@ -4,9 +4,10 @@ source ../testing.sh
 source ../term.sh
 
 declare -r TEST_TERM_PROGRESS_BAR_NAME="Upload"
-declare -r TEST_TERM_PROGRESS_BAR_0="$(echo -e "\rUpload [--------------------] 0% ")"
-declare -r TEST_TERM_PROGRESS_BAR_50="$(echo -e "\rUpload [++++++++++----------] 50% ")"
-declare -r TEST_TERM_PROGRESS_BAR_100="$(echo -e "\rUpload [++++++++++++++++++++] 100% ")"
+declare -r TEST_TERM_PROGRESS_BAR_0="$(echo -e "\rUpload [--------------------] 0%")"
+declare -r TEST_TERM_PROGRESS_BAR_50="$(echo -e "\rUpload [++++++++++----------] 50%")"
+declare -r TEST_TERM_PROGRESS_BAR_100="$(echo -e "\rUpload [++++++++++++++++++++] 100%")"
+declare -r TEST_TERM_PROGRESS_ON_ERROR="$(echo -e " ${BP_ASCII_COLOR_RED}${BP_TERM_ERROR}${BP_ASCII_COLOR_OFF}")"
 
 
 readonly TEST_TERM_CONFIRM="-1"
@@ -25,7 +26,7 @@ function test_dialog ()
 }
 
 
-readonly TEST_TERM_PROGRESS_BAR="-11-11-01-01-01-11"
+readonly TEST_TERM_PROGRESS_BAR="-11-01-01-01-01-01-11"
 
 function test_progressBar ()
 {
@@ -39,7 +40,12 @@ function test_progressBar ()
     # Check with only a job name
     test=$(progressBar "${TEST_TERM_PROGRESS_BAR_NAME}")
     echo -n "-$?"
-    [[ "$test" == "${BP_TERM_ERROR}" ]] && echo -n 1
+    [[ "$test" == "${TEST_TERM_PROGRESS_BAR_0}" ]] && echo -n 1
+
+    # Check with a job name and a starting step
+    test=$(progressBar "${TEST_TERM_PROGRESS_BAR_NAME}" 50)
+    echo -n "-$?"
+    [[ "$test" == "${TEST_TERM_PROGRESS_BAR_50}" ]] && echo -n 1
 
     # Check with starting job
     test=$(progressBar "${TEST_TERM_PROGRESS_BAR_NAME}" 0 100)
@@ -59,7 +65,7 @@ function test_progressBar ()
     # Check with negative max data (error)
     test=$(progressBar "${TEST_TERM_PROGRESS_BAR_NAME}" 70 -1)
     echo -n "-$?"
-    [[ "$test" == "${BP_TERM_ERROR}" ]] && echo -n 1
+    [[ "$test" == "${TEST_TERM_PROGRESS_ON_ERROR}" ]] && echo -n 1
 }
 
 

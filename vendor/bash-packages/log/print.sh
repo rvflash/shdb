@@ -11,10 +11,15 @@
 # @license http://www.apache.org/licenses/LICENSE-2.0
 # @source https://github.com/rvflash/bash-packages
 
-# Load configuration file if is not already loaded
-if [[ -z "${BP_LOG_LEVEL_INFO}" ]]; then
+# Load configuration files if is not already loaded
+if [[ -z "${BP_LOG_LEVEL_INFO}" || -z "${BP_ASCII_COLOR_OFF}" ]]; then
     declare -r BP_LOG_PRINT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    source "${BP_LOG_PRINT_DIR}/log.sh"
+    if [[ -z "${BP_LOG_LEVEL_INFO}" ]]; then
+        source "${BP_LOG_PRINT_DIR}/log.sh"
+    fi
+    if [[ -z "${BP_ASCII_COLOR_OFF}" ]]; then
+        source "${BP_LOG_PRINT_DIR}/../encoding/ascii.sh"
+    fi
 fi
 
 ##
@@ -84,7 +89,7 @@ function pWarnF ()
     if [[ -n "$format" ]]; then
         if [[ -n "${@:2}" || "$format" != *"%"[bqdiouxXfeEgGcsnaA]* ]]; then
             # Format is not a formatstring or there are arguments
-            format="${BP_LOG_COLOR_YELLOW}${format}${BP_LOG_COLOR_OFF}"
+            format="${BP_ASCII_COLOR_YELLOW}${format}${BP_ASCII_COLOR_OFF}"
         fi
     fi
 
@@ -113,7 +118,7 @@ function pErrorF ()
     if [[ -n "$format" ]]; then
         if [[ -n "${@:2}" || "$format" != *"%"[bqdiouxXfeEgGcsnaA]* ]]; then
             # Format is not a formatstring or there are arguments
-            format="${BP_LOG_COLOR_IRED}${format}${BP_LOG_COLOR_OFF}"
+            format="${BP_ASCII_COLOR_IRED}${format}${BP_ASCII_COLOR_OFF}"
         fi
     fi
 
@@ -142,7 +147,7 @@ function pFatalF ()
     if [[ -n "$format" ]]; then
         if [[ -n "${@:2}" || "$format" != *"%"[bqdiouxXfeEgGcsnaA]* ]]; then
             # Format is not a formatstring or there are arguments
-            format="${BP_LOG_COLOR_RED}${format}${BP_LOG_COLOR_OFF}"
+            format="${BP_ASCII_COLOR_RED}${format}${BP_ASCII_COLOR_OFF}"
         fi
     fi
 

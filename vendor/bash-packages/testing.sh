@@ -14,16 +14,11 @@
 declare -r BP_TESTING_PACKAGE_NAME="Package"
 declare -r BP_TESTING_UNIT_FILE_SUFFIX="Test.sh"
 
-# ASCII Color
-declare -r BP_TESTING_COLOR_OFF='\033[0m'
-declare -r BP_TESTING_COLOR_RED='\033[0;31m'
-declare -r BP_TESTING_COLOR_RED_BG='\033[101m'
-declare -r BP_TESTING_COLOR_GREEN='\033[0;32m'
-declare -r BP_TESTING_COLOR_GREEN_BG='\033[42m'
-declare -r BP_TESTING_COLOR_YELLOW='\033[0;33m'
-declare -r BP_TESTING_COLOR_BLUE='\033[0;34m'
-declare -r BP_TESTING_COLOR_GRAY='\033[0;90m'
-
+# Load ascii file if is not already loaded
+if [[ -z "${BP_ASCII_COLOR_OFF}" ]]; then
+    declare -r BP_TESTING_FILE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    source "${BP_TESTING_FILE_DIR}/encoding/ascii.sh"
+fi
 
 ##
 # Basic function to test A with B and validate the behavior of a method
@@ -39,18 +34,18 @@ function bashUnit ()
     local received="$3"
 
     if [[ -z "$method" || -z "$expected" || -z "$received" ]]; then
-        echo -i "${BP_TESTING_COLOR_RED}Missing values for BashUnit testing tool${BP_TESTING_COLOR_OFF}"
+        echo -i "${BP_ASCII_COLOR_RED}Missing values for BashUnit testing tool${BP_ASCII_COLOR_OFF}"
         exit 1
     fi
 
-    echo -ne "${BP_TESTING_COLOR_GRAY}Function${BP_TESTING_COLOR_OFF} ${method}: "
+    echo -ne "${BP_ASCII_COLOR_GRAY}Function${BP_ASCII_COLOR_OFF} ${method}: "
 
     if [[ "$received" == "$expected" ]]; then
-        echo -ne "${BP_TESTING_COLOR_GREEN}OK${BP_TESTING_COLOR_OFF}\n"
+        echo -ne "${BP_ASCII_COLOR_GREEN}OK${BP_ASCII_COLOR_OFF}\n"
     else
-        echo -ne "${BP_TESTING_COLOR_YELLOW}KO${BP_TESTING_COLOR_OFF}\n"
-        echo -ne "    > ${BP_TESTING_COLOR_GREEN}Expected:${BP_TESTING_COLOR_OFF} ${BP_TESTING_COLOR_GREEN_BG}${expected}${BP_TESTING_COLOR_OFF}\n"
-        echo -ne "    > ${BP_TESTING_COLOR_RED}Received:${BP_TESTING_COLOR_OFF} ${BP_TESTING_COLOR_RED_BG}${received}${BP_TESTING_COLOR_OFF}\n"
+        echo -ne "${BP_ASCII_COLOR_YELLOW}KO${BP_ASCII_COLOR_OFF}\n"
+        echo -ne "    > ${BP_ASCII_COLOR_GREEN}Expected:${BP_ASCII_COLOR_OFF} ${BP_ASCII_COLOR_GREEN_BG}${expected}${BP_ASCII_COLOR_OFF}\n"
+        echo -ne "    > ${BP_ASCII_COLOR_RED}Received:${BP_ASCII_COLOR_OFF} ${BP_ASCII_COLOR_RED_BG}${received}${BP_ASCII_COLOR_OFF}\n"
     fi
 }
 
@@ -76,7 +71,7 @@ function launchAllTests ()
     for bashFile in "${bashFiles[@]}"; do
         count+=1
         fileName="$(basename "${bashFile}" "${BP_TESTING_UNIT_FILE_SUFFIX}")"
-        echo -e "\n#${count} ${BP_TESTING_PACKAGE_NAME} ${BP_TESTING_COLOR_BLUE}${fileName/_/\/}${BP_TESTING_COLOR_OFF}"
+        echo -e "\n#${count} ${BP_TESTING_PACKAGE_NAME} ${BP_ASCII_COLOR_BLUE}${fileName/_/\/}${BP_ASCII_COLOR_OFF}"
         echo -e "$(${bashFile})"
     done
 }
