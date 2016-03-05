@@ -5,7 +5,7 @@
 #
 # Provide interface to dump SQL data and/or structure
 # Store table structure in file named `table.sql` in path DATABASE_NAME/tableName/table.sql
-# Store datas table in file named `datas.sql` by default, in path DATABASE_NAME/tableName/table.sql
+# Store datas table in file named `data.sql` by default, in path DATABASE_NAME/tableName/table.sql
 #
 # @copyright 2016 Hervé Gouchet
 # @license http://www.apache.org/licenses/LICENSE-2.0
@@ -76,7 +76,7 @@ fi
 
 # Read the options
 # Use getopts vs getopt for MacOs portability
-while getopts ":h::u::p:d::t::b:l:f:w:DTv" FLAG; do
+while getopts ":d::h::u::p:t::b:f:w:DTv" FLAG; do
     case "${FLAG}" in
         d) dbNames="$(trim "$OPTARG")" ;;
         t) tableNames="$(trim "$OPTARG")" ;;

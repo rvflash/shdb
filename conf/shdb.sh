@@ -11,7 +11,7 @@
 
 declare -r SHDB_TMP_DIR="/tmp/shdb"
 declare -r SHDB_SQL_TABLE_FILENAME="table.sql"
-declare -r SHDB_SQL_DATA_FILENAME="datas.sql"
+declare -r SHDB_SQL_DATA_FILENAME="data.sql"
 declare -r SHDB_DB_HOST="localhost"
 declare -r SHDB_DB_USERNAME="mysql"
 declare -r SHDB_DB_PASSWORD=""
