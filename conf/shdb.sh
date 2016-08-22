@@ -16,9 +16,9 @@ declare -r SHDB_DB_HOST="localhost"
 declare -r SHDB_DB_USERNAME="mysql"
 declare -r SHDB_DB_PASSWORD=""
 
- # Single transaction as option is mandatory for Brighthouse database
+ # Single transaction as option is mandatory for Infobright Brighthouse database
 declare -r SHDB_DUMP_OPTIONS="--opt --no-create-db --skip-trigger"
-declare -r SHDB_DUMP_TABLE_OPTIONS="${SHDB_DUMP_OPTIONS} --no-data --single-transaction"
+declare -r SHDB_DUMP_TABLE_OPTIONS="${SHDB_DUMP_OPTIONS} --no-data --single-transaction --skip-comments"
 declare -r SHDB_DUMP_DATA_TABLE_OPTIONS="${SHDB_DUMP_OPTIONS} --no-create-info --compact --complete-insert"
 
 # Create temporary workspace
