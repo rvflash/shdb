@@ -35,7 +35,7 @@ mysql & mysqldump command line tools
 It is possible to make several databases simultaneously, but surely of little use in a production environment.
 
 ```bash
-usage: ./dump.sh -d databases [-t tables] [-h host] [-u user] [-p password] [-b backupDirectory] [-f sqlFileName] [-w whereCondition] [-v] [-D] [-T]
+usage: ./dump.sh -d databases [-t tables] [-h host] [-u user] [-p password] [-b backupDirectory] [-f sqlFileName] [-w whereCondition] [-v] [-D] [-T] [-A]
 -d for database name(s), separated by a space
 -t for table name(s), separated by a space
 -h for database hostname, default 'localhost'
@@ -47,6 +47,7 @@ usage: ./dump.sh -d databases [-t tables] [-h host] [-u user] [-p password] [-b 
 -v used to print SQL Query
 -D for export data with schema
 -T for keep TMP tables, by convention named with '_' as first letter or with '_TMP' on the name
+-A for keep auto-increment value
 ```
 
 

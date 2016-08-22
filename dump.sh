@@ -35,6 +35,7 @@ dumpDataFileName="${SHDB_SQL_DATA_FILENAME}"
 whereCondition=""
 declare -i withData=0
 declare -i withTmpTable=0
+declare -i withAutoIncrement=0
 
 
 ##
@@ -56,6 +57,7 @@ function usage ()
     echo "-v used to print SQL Query"
     echo "-D for export data with schema"
     echo "-T for keep TMP tables, by convention named with '_' as first letter or with '_TMP' on the name"
+    echo "-A for keep auto-increment value"
     echo
 
     if [[ "$errorName" == "MYSQLDUMP" ]]; then
@@ -76,7 +78,7 @@ fi
 
 # Read the options
 # Use getopts vs getopt for MacOs portability
-while getopts ":d::h::u::p:t::b:f:w:DTv" FLAG; do
+while getopts ":d::h::u::p:t::b:f:w:DTvA" FLAG; do
     case "${FLAG}" in
         d) dbNames="$(trim "$OPTARG")" ;;
         t) tableNames="$(trim "$OPTARG")" ;;
@@ -94,6 +96,7 @@ while getopts ":d::h::u::p:t::b:f:w:DTv" FLAG; do
         v) logMute 0 ;;
         D) withData=1 ;;
         T) withTmpTable=1 ;;
+        A) withAutoIncrement=1 ;;
         *) usage; exit 1 ;;
         ?) exit 2 ;;
     esac
@@ -169,6 +172,10 @@ for dbName in ${dbNames}; do
             fi
             pFatalF "${error}\n%s" "$(mysqlLastError "$dbLink")"
         else
+            if [[ ${withAutoIncrement} -eq 0 ]]; then
+                # Manage sed -i on osx ...
+                sed -e 's/ AUTO_INCREMENT=[0-9]*\b//' "$dumpTableFile" > "${dumpTableFile}-e" && mv "${dumpTableFile}-e" "$dumpTableFile"
+            fi
             pInfoF "DumpTable.CREATE_TABLE (%s: %s)" "$tableName" "$dumpTableFile"
         fi
 
