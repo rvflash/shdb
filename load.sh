@@ -197,8 +197,13 @@ for dbName in "${dbs[@]}"; do
         continue
     fi
 
-    # Remove SQL comments and empty lines
-    sed -e "s/--.*$//" -e "s/\/.*$//" -e "/^$/d" "$dbFile" > "${dbFile}-e" && mv "${dbFile}-e" "${dbFile}"
+    # Removes SQL comments and empty lines
+    # Like :
+    #   # This comment continues to the end of line
+    #   -- This comment continues to the end of line
+    #   /* this is an in-line comment */
+    # The multiple-line comments are not managed
+    sed -e "s/--.*$//" -e "s/#.*$//" -e "s/\/\*.*$//" -e "/^$/d" "$dbFile" > "${dbFile}-e" && mv "${dbFile}-e" "${dbFile}"
 
     # Re-build database / tables ?
     if [[ ${forceRebuild} -eq 0 ]]; then
