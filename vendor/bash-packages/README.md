@@ -2,12 +2,16 @@
 
 ## Package array
 
+* Function arrayCombine ( array keys, array values ) array `?>0 If the number of elements for each array isn't equal`
 * Function arrayDiff ( array haystack1, array haystack2 ) array `?=0`
+* Function arrayFillKeys ( array keys, string value) array `?=0`
+* Function arrayKeyExists ( string needle, array haystack1) void  `?=0 if needle exists as key in array, 1 otherwise`
+* Function arrayMerge ( array haystack1, array haystack2 ) array `?=0`
 * Function arraySearch ( string needle, array haystack ) mixed `?=0 if needle is found, 1 otherwise`
 * Function arrayToString ( string arrayDeclaration ) string `?=0`
+* Function arrayUnique ( string arrayDeclaration ) array `?=0`
 * Function count ( mixed value ) int `?=0`
 * Function inArray ( string needle, array haystack ) void `?=0 if needle is found, 1 otherwise`
-
 
 ## Package database/mysql
 
@@ -103,16 +107,26 @@ You can also add your own prefix by using the method named `logUsePrefix`.
 
 > The bc command is not mandatory for this package, but used if exists
 
+* Function add ( mixed var1, mixed var2, int scale ) float|int `?>0 In case of error`
+* Function ceil ( float value ) int `?>0 In case of error`
 * Function decimal ( mixed value ) int `?>0 In case of error`
+* Function divide ( mixed var1, mixed var2, int scale ) float|int `?>0 In case of error`
+* Function floor ( float value ) int `?>0 If value is not a number`
 * Function int ( mixed value ) int `?>0 In case of error`
 * Function isFloat ( mixed value ) void `?=0 if it is a float value, 1 otherwise`
 * Function isInt ( mixed value ) void `?=0 if it is a integer value, 1 otherwise`
 * Function isNumeric ( mixed value ) void `?=0 if it is a numeric value, 1 otherwise`
+* Function isFloatEqualOrGreaterThan ( float var1, mixed var2 ) void `?=0 if var 1 is lower, 1 otherwise`
+* Function isFloatEqualOrLowerThan ( float var1, mixed var2 ) void `?=0 if var 1 is lower, 1 otherwise`
 * Function isFloatGreaterThan ( float var1, mixed var2 ) void `?=0 if var 1 is lower, 1 otherwise`
 * Function isFloatLowerThan ( float var1, mixed var2 ) void `?=0 if var 1 is greater, 1 otherwise`
-* Function floor ( float value ) int `?>0 If value is not a number`
+* Function math ( string operator, mixed var1, mixed var2, int scale ) float|int `?>0 In case of error`
+* Function modulo ( int var1, int var2, int scale ) int `?>0 In case of error`
+* Function multiply ( mixed var1, mixed var2, int scale ) float|int `?>0 In case of error`
 * Function numericType ( mixed Str ) string[ "integer", "float", "unknown" ] `?=0`
 * Function rand ( ) int `?=0`
+* Function round ( float value [, int scale] ) float|int `?=0`
+* Function subtract ( mixed var1, mixed var2, int scale ) float|int `?>0 In case of error`
 
 
 ## Package net
@@ -126,6 +140,8 @@ You can also add your own prefix by using the method named `logUsePrefix`.
 * Function isEmpty ( string str ) `?=0 if not empty, 1 if empty`
 * Function printLeftPadding ( string str, int padLength [ , string padChar ] ) string `?=0`
 * Function printRightPadding ( string str, int padLength [ , string padChar ] ) string `?=0`
+* Function toLower ( string str ) string `?=0`
+* Function toUpper ( string str ) string `?=0`
 * Function trim ( string str [ , string charToMask ] ) string `?=0`
 
 
