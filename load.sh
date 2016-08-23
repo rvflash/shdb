@@ -204,7 +204,7 @@ for dbName in "${dbs[@]}"; do
     #   -- This comment continues to the end of line
     #   /* this is an in-line comment */
     # The multiple-line comments are not managed
-    sed -e "s/--.*$//" -e "s/#.*$//" -e "s/\/\*.*\*\/\(;\)\{0,1\}//" -e "/^$/d" "$dbFile" > "${dbFile}-e" && mv "${dbFile}-e" "${dbFile}"
+    sed -e "s/\/\*.*\*\///" -e "s/--.*$//" -e "s/#.*$//" -e "/^$/d" "$dbFile" | sed -e "/^;$/N;/\n;$/D" > "${dbFile}-e" && mv "${dbFile}-e" "${dbFile}"
 
     # Re-build database / tables ?
     if [[ ${forceRebuild} -eq 0 ]]; then
