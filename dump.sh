@@ -5,15 +5,15 @@
 #
 # Provide interface to dump SQL data and/or structure
 # Store table structure in file named `table.sql` in path DATABASE_NAME/tableName/table.sql
-# Store datas table in file named `data.sql` by default, in path DATABASE_NAME/tableName/table.sql
+# Store data table in file named `data.sql` by default, in path DATABASE_NAME/tableName/table.sql
 #
 # @copyright 2016 Hervé Gouchet
 # @license http://www.apache.org/licenses/LICENSE-2.0
 # @source https://github.com/rvflash/shdb
 
 # Environment
-scriptPath="$0"; while [[ -h "$scriptPath" ]]; do scriptPath="$(readlink "$scriptPath")"; done
-scriptRoot=$(dirname "$scriptPath")
+declare -- scriptPath="$0"; while [[ -h "$scriptPath" ]]; do scriptPath="$(readlink "$scriptPath")"; done
+declare -- scriptRoot=$(dirname "$scriptPath")
 
 source "${scriptRoot}/conf/shdb.sh"
 source "${scriptRoot}/vendor/bash-packages/term.sh"
@@ -25,14 +25,14 @@ source "${scriptRoot}/vendor/bash-packages/database/mysql.sh"
 logMute 1
 
 # Default values for entry points
-dbNames=""
-tableNames=""
-dbHost="${SHDB_DB_HOST}"
-dbUser="${SHDB_DB_USERNAME}"
-dbPassword="${SHDB_DB_PASSWORD}"
-dumpDir="${SHDB_TMP_DIR}"
-dumpDataFileName="${SHDB_SQL_DATA_FILENAME}"
-whereCondition=""
+declare -- dbNames=""
+declare -- tableNames=""
+declare -- dbHost="${SHDB_DB_HOST}"
+declare -- dbUser="${SHDB_DB_USERNAME}"
+declare -- dbPassword="${SHDB_DB_PASSWORD}"
+declare -- dumpDir="${SHDB_TMP_DIR}"
+declare -- dumpDataFileName="${SHDB_SQL_DATA_FILENAME}"
+declare -- whereCondition=""
 declare -i withData=0
 declare -i withTmpTable=0
 declare -i withAutoIncrement=0
@@ -109,6 +109,7 @@ if [[ -z "$dbNames" ]]; then
     exit 1
 fi
 
+declare -- error=""
 for dbName in ${dbNames}; do
 
     # Database to process
@@ -151,7 +152,12 @@ for dbName in ${dbNames}; do
 
         # Skip temporary tables
         if [[ ${withTmpTable} -eq 0 ]] && [[ "$tableName" == "_"* || "$tableName" == *"_TMP"* ]]; then
-            pWarnF "DumpTable.SKIP_TABLE (%s)" "$tableName"
+            error=$(printf "DumpTable.SKIP_TABLE (%s)" "$tableName")
+            if logIsMuted; then
+                echo -ne " $error\n"
+            else
+                pWarn "$error"
+            fi
             continue
         fi
 
